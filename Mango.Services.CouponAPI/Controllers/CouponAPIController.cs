@@ -33,7 +33,10 @@ namespace Mango.Services.CouponAPI.Controllers
                 return _responseDto;
             }
             catch (Exception ex)
-            { }
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
             return _responseDto;
         }
 
