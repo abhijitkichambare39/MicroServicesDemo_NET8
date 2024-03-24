@@ -35,3 +35,12 @@ Update-Database
 <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+
+
+### use post body api swagger with coupon id = 0 when create 
+{
+  "couponId": 0,
+  "couponCode": "40off",
+  "discountAmount": 40,
+  "minAmount": 40
+}
