@@ -44,3 +44,16 @@ Update-Database
   "discountAmount": 40,
   "minAmount": 40
 }
+
+
+# Authentication Api 
+-- ApplicationUser : IdentityUser add migrations 
+
+
+{
+  "email": "Admin@Admin.com",
+  "name": "Admin",
+  "phoneNumber": "1234567890",
+  "password": "Admin@123",
+  "role": "Admin"
+}
