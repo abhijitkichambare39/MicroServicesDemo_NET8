@@ -7,9 +7,11 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-a {
-  color: #0077cc;
-}
+/*a {*/
+  /*color: #0077cc;*/
+/*  background-color:burlywood;
+  border-radius:3px;*/
+/*}*/
 
 .btn-primary {
   color: #fff;
