@@ -18,6 +18,11 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+        public IActionResult ProductIndex()
+        {
+            return View(); 
+        }
+
         public IActionResult Privacy()
         {
             return View();
