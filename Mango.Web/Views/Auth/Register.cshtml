@@ -1,0 +1,55 @@
+﻿@using Mango.Web.Models.Dto.Auth
+@model RegistrationRequestDto
+
+<form method="post">
+    <div class="container border p-4">
+        <div class="row text-center p-3">
+            <h1>Register</h1>
+        </div>
+        <div class="row text-center">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-6 pb-2">
+                <label asp-for="Email" class="form-label mt-1">Email</label>
+                <input type="email" asp-for="Email" class="form-control" placeholder="Email..." />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="col-6 col-md-6 pb-2">
+                <label asp-for="Name" class="form-label mt-1">Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Name..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-6 col-md-6 pb-2">
+                <label asp-for="PhoneNumber" class="form-label mt-1">PhoneNumber</label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number..." />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="col-6 col-md-6 pb-2">
+                <label asp-for="Password" class="form-label mt-1">Password</label>
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password..." />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-12 pb-xxl-4">
+                <label asp-for="Role" class="form-label mt-1">Role</label>
+                <select asp-for="Role" class="form-control" asp-items="@ViewBag.RoleList">
+                    <option disabled selected>--Select Role--</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-12 p-md-5 ">
+                <button type="submit" value="Submit" style="background:#bcdec4;color:black;font-weight:bold;"
+                        class="form-control btn btn-outline-success"
+                        onmouseover="this.style.background='#228e3b'"
+                        onmouseout="this.style.background='#bcdec4'">
+                    Register
+                </button>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

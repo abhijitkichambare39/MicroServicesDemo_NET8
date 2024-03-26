@@ -14,7 +14,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Mango.Web</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web-Aplication(MVC)</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -37,6 +37,30 @@
                             </ul>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-info" style="background:#17a2b8;margin-right:10px;" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-info" style="background:#17a2b8;margin-right:20px;" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn" style="background:#bcdec4;margin-right:10px;" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                    Hello, @User.Identity.Name
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-info" style="background:#17a2b8;margin-right:10px;margin-left:20px;" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
+                            </li>
+
+                        }
+
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -50,7 +74,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="text-left" style="padding-left:10px;">
-            &copy; 2024 - Made with <i class="bi bi-emoji-heart-eyes-fill"></i> by  Abhijit Kichambare <i class="bi bi-github"></i>
+            &copy; 2024 - Made with <i class="bi bi-emoji-heart-eyes-fill"></i> by  <a href="https://github.com/abhijitkichambare39" target="_blank"> Abhijit Kichambare</a> <i class="bi bi-github"></i>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -11,12 +11,14 @@ namespace Mango.Web.Service.Implementation
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ITokenProvider _tokenProvider;
 
-        public BaseService(IHttpClientFactory httpClientFactory)
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenProvider = tokenProvider;
         }
-        public async Task<ResponseDto>? SendAsync(RequestDto requestDto)
+        public async Task<ResponseDto>? SendAsync(RequestDto requestDto,bool withBearer = true)
         {
             try
             {
@@ -24,6 +26,13 @@ namespace Mango.Web.Service.Implementation
                 HttpRequestMessage httpRequestMessage = new();
                 httpRequestMessage.Headers.Add("Accept", "application/json");
                 //token
+
+                if(withBearer)
+                {
+                    var token = _tokenProvider.GetToken();
+                    httpRequestMessage.Headers.Add("Authorization",$"Bearer {token}");
+                }
+
                 httpRequestMessage.RequestUri = new Uri(requestDto.Url);
 
                 if (requestDto.Data != null)
@@ -49,7 +58,7 @@ namespace Mango.Web.Service.Implementation
                 }
 
 
-                HttpResponseMessage httpResponseMessage = null;
+                HttpResponseMessage? httpResponseMessage = null;
                 httpResponseMessage = await client.SendAsync(httpRequestMessage);
 
                 switch (httpResponseMessage.StatusCode)
@@ -62,6 +71,8 @@ namespace Mango.Web.Service.Implementation
                         return new() { IsSuccess = false, Message = "Unauthorized" };
                     case HttpStatusCode.InternalServerError:
                         return new() { IsSuccess = false, Message = "Internal Server Error" };
+                    //case HttpStatusCode.BadRequest:
+                    //    return new() { IsSuccess = false, Message = "Bad Request" };
                     default:
                         var apiContent = await httpResponseMessage.Content.ReadAsStringAsync();
                         var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
