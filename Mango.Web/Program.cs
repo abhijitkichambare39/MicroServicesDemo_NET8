@@ -15,21 +15,27 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<IBaseService, BaseService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
+
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
-SD.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"].Trim();
+
 SD.AuthApiBase = builder.Configuration["ServiceUrls:AuthAPI"].Trim();
+SD.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"].Trim();
+SD.ProductApiBase = builder.Configuration["ServiceUrls:ProductAPI"].Trim();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.ExpireTimeSpan = TimeSpan.FromHours(10);
         options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.AccessDeniedPath = "/Forbidden/AccessDenied";
     });
 
 var app = builder.Build();
