@@ -40,7 +40,7 @@ namespace Mango.Services.AuthAPI.Service.Implementation
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            var user = _db.ApplicationUsers.First(u => u.UserName.ToLower().Trim() == loginRequestDto.UserName.ToLower().Trim());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower().Trim() == loginRequestDto.UserName.ToLower().Trim());
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
             if (user == null || isValid == false)
             {
@@ -48,7 +48,8 @@ namespace Mango.Services.AuthAPI.Service.Implementation
             }
 
             //if user found generate jwt token
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user,roles);
 
             UserDto userDto = new()
             {
@@ -104,7 +105,6 @@ namespace Mango.Services.AuthAPI.Service.Implementation
             }
             catch (Exception ex)
             {
-
 
             }
             return "Error Encountered";
