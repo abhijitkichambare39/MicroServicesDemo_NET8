@@ -63,3 +63,43 @@ Update-Database
 # Home Page- UI & API
 
 # SHOPPING-API 
+
+shopping cart save 
+
+{
+  "cartHeader": {
+    "cartHeaderId": 0,
+    "userId": "string",
+    "couponCode": "string",
+    "discount": 0,
+    "cartTotal": 0
+  },
+  "cartDetails": [
+    {
+      "cartDetailsId": 0,
+      "cartHeaderId": 0,      
+      "productId": 0,     
+      "count": 0
+    }
+  ]
+}
+update
+ {
+  "cartHeader": {
+    "cartHeaderId": 1,
+    "userId": "1userid",
+    "couponCode": "",
+    "discount": 0,
+    "cartTotal": 1001
+  },
+  "cartDetails": [
+    {
+      "cartDetailsId": 0,
+      "cartHeaderId": 0,      
+      "productId": 3,     
+      "count": 3
+    }
+  ]
+}
+
+# Shopping-Cart-UI
