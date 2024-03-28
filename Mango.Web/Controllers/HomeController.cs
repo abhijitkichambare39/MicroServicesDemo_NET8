@@ -1,4 +1,6 @@
+using IdentityModel;
 using Mango.Web.Models;
+using Mango.Web.Models.Dto.Cart;
 using Mango.Web.Models.Dto.Product;
 using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +14,12 @@ namespace Mango.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
- 
-        public HomeController(ILogger<HomeController> logger, IProductService ProductService)
+        private readonly ICartService _cartService;
+
+        public HomeController(ILogger<HomeController> logger, IProductService ProductService, ICartService cartService)
         {
             _productService = ProductService;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Index()
@@ -53,7 +57,42 @@ namespace Mango.Web.Controllers
             return View(obj);
         }
 
-        public async  Task<IActionResult> ProductIndex()
+        [Authorize]
+        [HttpPost]
+        [ActionName("ProductDetails")]
+        public async Task<IActionResult> ProductDetails(ProductDto productDto)
+        {
+            CartDto cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
+                }
+            };
+            CartDetailsDto cartDetailsDto = new CartDetailsDto()
+            {
+                Count = productDto.Count,
+                ProductId = productDto.ProductId,
+            };
+            List<CartDetailsDto> cartDetailsDtos = new() { cartDetailsDto };
+            cartDto.CartDetails = cartDetailsDtos;
+
+            ResponseDto? responseDto = await _cartService.UpsertCartAsync(cartDto);
+
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Item Added to Shopping Cart";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = responseDto?.Message;
+            }
+
+            return View(productDto);
+        }
+
+        public async Task<IActionResult> ProductIndex()
         {
             List<ProductDto> list = new();
             ResponseDto? responseDto = await _productService.GetAllProductsAsync();
