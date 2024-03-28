@@ -1,4 +1,5 @@
-﻿using Mango.Web.Models;
+﻿using IdentityModel;
+using Mango.Web.Models;
 using Mango.Web.Models.Dto.Cart;
 using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,45 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> CartIndex()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        public async Task<IActionResult> Remove(int CartDetailsId)
+        {
+            var userId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value;
+            ResponseDto? response = await _cartService.RemoveFromCartAsync(CartDetailsId);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Cart Updated Successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            var userId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value;
+            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Cart Updated Successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            cartDto.CartHeader.CouponCode = "";
+            //ResponseDto? response = await _cartService.RemoveFromCartAsync(cartDto);
+            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Cart Updated Successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
         }
 
 
