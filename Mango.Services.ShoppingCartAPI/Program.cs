@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Mango.Services.ShoppingCartAPI.Service.IService;
 using Mango.Services.ShoppingCartAPI.Service.Implementation;
+using Mango.MessageBus.Service;
+using Mango.MessageBus.Service.IService;
+using Mango.MessageBus.Service.Implementation;
+using Mango.MessageBus;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +35,8 @@ builder.Services.AddHttpClient("Coupon", u => u.BaseAddress = new Uri(builder.Co
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+
 
 
 builder.Services.AddControllers();
