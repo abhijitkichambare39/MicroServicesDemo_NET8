@@ -113,3 +113,6 @@ update
 -- Controlller CreateIndex.cshtml aspAction Email Cart , 
 -- DI MessageBus in APIConttroller
 -- Appsettings.Json TopicAndQueueNames
+
+
+# EMAIL-API 
