@@ -103,3 +103,13 @@ update
 }
 
 # Shopping-Cart-UI
+
+# SERVICE-BUS
+
+-- Add Project Refrence in Mango.Service.ShoppingCartAPI (ref - Mango.MessageBus)
+-- Login to Azure Portal
+-- Create Service Queue
+-- Shared Policies //// get copy  of Primary Connection-string
+-- Controlller CreateIndex.cshtml aspAction Email Cart , 
+-- DI MessageBus in APIConttroller
+-- Appsettings.Json TopicAndQueueNames
