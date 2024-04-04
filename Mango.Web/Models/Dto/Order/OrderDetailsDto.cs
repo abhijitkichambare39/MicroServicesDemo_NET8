@@ -1,4 +1,7 @@
-﻿namespace Mango.Services.OrderAPI.Models.Dto
+﻿using Mango.Web.Models.Dto.Product;
+
+
+namespace Mango.Web.Models.Dto.Order
 {
     public class OrderDetailsDto
     {
