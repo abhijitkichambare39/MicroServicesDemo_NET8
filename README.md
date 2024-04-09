@@ -115,6 +115,8 @@ update
 -- Appsettings.Json TopicAndQueueNames
 
 
-# EMAIL-API 
+## EMAIL-API 
 
 ## Checkout ORDER-UI & ORDER-API
+
+## STRIPE-CHECKOUT API
