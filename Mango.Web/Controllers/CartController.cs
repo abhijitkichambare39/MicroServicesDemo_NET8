@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using Mango.Web.Models;
 using Mango.Web.Models.Dto.Cart;
+using Mango.Web.Models.Dto.Order;
 using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,44 @@ namespace Mango.Web.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
+        private readonly IOrderService _orderService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IOrderService orderService)
         {
             _cartService = cartService;
+            _orderService = orderService;
         }
 
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> CartCheckout()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ActionName("CartCheckout")]
+        public async Task<IActionResult> CartCheckout(CartDto cartDto)
+        {
+            CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
+            cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+            cart.CartHeader.EmailAddress = cartDto.CartHeader.EmailAddress;
+            cart.CartHeader.Name = cartDto.CartHeader.Name;
+
+            var response = await _orderService.CreateOrder(cart);
+            OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+            if (response != null && response.IsSuccess)
+            {
+                //get stripe session and redirect to stripe to place order 
+            }
+            return View();
         }
 
         public async Task<IActionResult> Remove(int CartDetailsId)
@@ -82,7 +111,7 @@ namespace Mango.Web.Controllers
         {
 
             CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
-            cart.CartHeader.EmailAddress =  User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Email)?.FirstOrDefault()?.Value;
+            cart.CartHeader.EmailAddress = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Email)?.FirstOrDefault()?.Value;
 
             ResponseDto? response = await _cartService.EmailCartAsync(cart);
             if (response != null && response.IsSuccess)
